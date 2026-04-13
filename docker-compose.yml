@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  backend:
+    image: node:14
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=db
+      - REDIS_HOST=redis
+
+  db:
+    image: postgres:13
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=exampleuser
+      - POSTGRES_PASSWORD=examplepass
+      - POSTGRES_DB=exampledb
+
+  redis:
+    image: redis:6
+
+  frontend:
+    image: nginx:alpine
+    ports:
+      - '80:80'
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+
+volumes:
+  pgdata:
